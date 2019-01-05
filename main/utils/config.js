@@ -1,3 +1,5 @@
+const path = require('path')
+const { homedir } = require('os')
 const fs = require('fs-extra')
 const deepExtend = require('deep-extend')
 const groom = require('groom')
@@ -5,6 +7,14 @@ const groom = require('groom')
 const paths = {
   auth: '.issu/auth.json',
   config: '.issu/config.json'
+}
+
+for (const file in paths) {
+  if (!{}.hasOwnProperty.call(paths, file)) {
+    continue
+  }
+
+  paths[file] = path.join(homedir(), paths[file])
 }
 
 exports.saveConfig = async (data, type) => {

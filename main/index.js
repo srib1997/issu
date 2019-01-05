@@ -3,6 +3,8 @@ const { app, BrowserWindow } = require('electron')
 const prepareNext = require('electron-next')
 const isDev = require('electron-is-dev')
 
+const autoUpdater = require('./updates')
+
 const loadPage = (win, page) => {
   if (isDev) {
     win.loadURL(`http://localhost:8000/${page}`)
@@ -15,7 +17,7 @@ const loadPage = (win, page) => {
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
-async function createWindow () {
+async function createWindow() {
   // Ensure that `next` works with `electron`
   try {
     await prepareNext('./renderer')
@@ -24,9 +26,11 @@ async function createWindow () {
   }
 
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({ width: 800, height: 600 })
 
   loadPage(mainWindow, 'feed')
+
+  autoUpdater(mainWindow)
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
@@ -55,5 +59,5 @@ app.on('activate', () => {
   }
 })
 
-// In this file you can include the rest of your app's specific main process
+// In this  file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

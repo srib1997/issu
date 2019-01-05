@@ -1,3 +1,3 @@
-export default function Feed () {
-  return <div>dlsfjlsdjfls</div>
+export default function Feed() {
+  return <div>i love me</div>
 }

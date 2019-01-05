@@ -1,0 +1,96 @@
+{
+  "name": "issu",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": true,
+  "main": "main/index.js",
+  "scripts": {
+    "start": "electron main",
+    "build": "yarn build-renderer && yarn build-app",
+    "build-app": "build",
+    "build-renderer": "cross-env NODE_ENV=production next build renderer && next export renderer",
+    "precommit": "lint-staged",
+    "test-lint": "xo"
+  },
+  "dependencies": {
+    "app-root-path": "^2.1.0",
+    "babel-eslint": "^10.0.1",
+    "electron-is-dev": "^1.0.1",
+    "electron-next": "^3.1.5",
+    "electron-squirrel-startup": "^1.0.0",
+    "fix-path": "^2.1.0"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-define": "^1.3.1",
+    "cross-env": "^5.2.0",
+    "electron": "^3.0.13",
+    "electron-builder": "^20.38.4",
+    "electron-builder-squirrel-windows": "^20.38.3",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-react": "^7.12.2",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.0",
+    "next": "^6.1.1",
+    "prettier": "^1.15.3",
+    "prop-types": "^15.6.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "xo": "^0.23.0"
+  },
+  "build": {
+    "appId": "app.issu.issu",
+    "files": [
+      "**/*",
+      "!renderer",
+      "renderer/out"
+    ],
+    "win": {
+      "target": [
+        "squirrel"
+      ],
+      "icon": "main/static/icons/windows.ico"
+    },
+    "squirrelWindows": {
+      "loadingGif": "main/static/install-spinner.gif"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "main/static/icons/mac.icns",
+      "extendInfo": {
+        "LSUIElement": 1
+      }
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "yarn test-lint",
+      "prettier --single-quote --no-semi --write --no-editorconfig",
+      "git add"
+    ]
+  },
+  "xo": {
+    "parser": "babel-eslint",
+    "extends": [
+      "prettier",
+      "prettier/react",
+      "plugin:react/recommended"
+    ],
+    "env": [
+      "browser",
+      "node"
+    ],
+    "rules": {
+      "no-await-in-loop": 0,
+      "react/react-in-jsx-scope": 0,
+      "import/no-unresolved": 0,
+      "import/no-extraneous-dependencies": 0,
+      "complexity": 0,
+      "lines-between-class-members": 0
+    },
+    "ignores": [
+      "dist",
+      "renderer/.next",
+      "renderer/out"
+    ]
+  }
+}

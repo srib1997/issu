@@ -2,8 +2,12 @@
 const { app, BrowserWindow } = require('electron')
 const prepareNext = require('electron-next')
 const isDev = require('electron-is-dev')
-
+const Sentry = require('@sentry/electron')
 const autoUpdater = require('./updates')
+
+Sentry.init({
+  dsn: 'https://c8371db438994884a56ff32199f5f4ba@sentry.io/1364904'
+})
 
 const loadPage = (win, page) => {
   if (isDev) {

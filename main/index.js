@@ -38,7 +38,8 @@
 //   let token
 
 //   try {
-//     ;({ token } = await getConfig())
+//     const config = await getConfig()
+//     token = config.token
 //   } catch (error) {}
 
 //   loggedIn = Boolean(token)
@@ -55,7 +56,7 @@
 // // Set the application's name
 // app.setName('Issu')
 
-// // 當有錯誤處理時
+// // 當有錯誤處理時, 就會執行 handleException
 // // Handle uncaught exceptions
 // process.on('uncaughtException', handleException)
 
@@ -78,6 +79,65 @@
 //     openAtLogin: true
 //   })
 // }
+
+// // 每個人裝的位都不一樣
+// // 確定繼承正確路徑的位置
+// // 在捆綁的應用程序中，路徑會有所不同
+// // Makes sure where inheriting the correct path
+// // Within the bundled app, the path would otherwise be different
+// fixPath()
+
+// // 當所有視槍關的時候，你個 system 唔係 Mac 的時氤，你個 App 就會刪佐
+// app.on('window-all-closed', () => {
+//   if (process.platform !== 'darwin') {
+//     app.quit()
+//   }
+// })
+
+// // 依個係一個 async function, 視父你有無上線去決定你個右键 Menu
+// const contextMenu = async (windows, inRenderer) => {
+//   if (process.env.CONNECTION === 'offline') {
+//     return outerMenu(app, windows)
+//   }
+
+//   return innerMenu(app, tray, windows, inRenderer)
+// }
+
+// // Chrome 的 setting
+// // Chrome Command Line Switches
+// app.commandLine.appendSwitch('disable-renderer-backgrounding')
+
+// app.on('ready', async () => {
+//   // Config 一開始係一個空的 object
+//   let config = {}
+
+//   // 開始讀取 config, 如果讀唔到的話就係一個空的 object
+//   try {
+//     config = await getConfig()
+//   } catch (error) {
+//     config = {}
+//   }
+
+//   // 定義一個 BrowserWindow 用黎偵測上網 status
+//   const onlineStatusWindow = new electron.BrowserWindow({
+//     width: 0,
+//     height: 0,
+//     show: false
+//   })
+
+//   // 載入一個 status html
+//   // status.html 入面會偵測上網 status,
+//   // 然後會籍由 online-status-changed 事件同 index.js 溝通
+//   onlineStatusWindow.loadURL(
+//     'file://' + resolvePath('./main/static/pages/status.html')
+//   )
+
+//   // 當 index.js 收到依個事件之後，就將上網 status 存到 process.env.CONNECTION
+//   // process.env.CONNECTION 的改變右键 Menu
+//   electron.ipcMain.on('online-status-changed', (event, status) => {
+//     process.env.CONNECTION = status
+//   })
+// })
 
 // const loadPage = (win, page) => {
 //   if (isDev) {

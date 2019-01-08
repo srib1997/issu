@@ -30,7 +30,8 @@
     "groom": "^1.1.1",
     "ms": "^2.1.1",
     "path-exists": "^3.0.0",
-    "react-fast-compare": "^2.0.4"
+    "react-fast-compare": "^2.0.4",
+    "time-ago": "^0.2.1"
   },
   "devDependencies": {
     "babel-plugin-transform-define": "^1.3.1",

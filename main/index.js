@@ -9,7 +9,7 @@ const Sentry = require('@sentry/electron')
 
 // Utilities
 const firstRun = require('./utils/first-run')
-const { outerMenu } = require('./menu')
+const { outerMenu, innerMenu } = require('./menu')
 const { getConfig, watchConfig } = require('./utils/config')
 const { exception: handleException } = require('./utils/error')
 const autoUpdater = require('./updates')
@@ -109,7 +109,7 @@ const contextMenu = async (windows, inRenderer) => {
     return outerMenu(app, windows)
   }
   // Intermenu
-  return outerMenu(app, tray, windows, inRenderer)
+  return innerMenu(app, tray, windows, inRenderer)
 }
 
 // Chrome 的 setting

@@ -45,8 +45,7 @@ exports.tutorialWindow = tray => {
     }
   })
 
-  // ***
-  loadPage(win, 'feed')
+  loadPage(win, 'tutorial')
   attachTrayState(win, tray)
 
   const emitTrayClick = aboutWindow => {
@@ -93,8 +92,7 @@ exports.aboutWindow = tray => {
     }
   })
 
-  // ***
-  loadPage(win, 'feed')
+  loadPage(win, 'about')
   attachTrayState(win, tray)
 
   return win

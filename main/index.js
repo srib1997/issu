@@ -43,7 +43,7 @@ let loggedIn = null
 // And then every 2 seconds
 // We could to this on click on the tray icon, but we
 // don't want to block that action
-const setLoggedInStatus = async () => {
+const getLoggedInStatus = async () => {
   let token
 
   try {
@@ -52,6 +52,11 @@ const setLoggedInStatus = async () => {
   } catch (error) {}
 
   loggedIn = Boolean(token)
+  return loggedIn
+}
+
+const setLoggedInStatus = async () => {
+  await getLoggedInStatus()
   setTimeout(setLoggedInStatus, 2000)
 }
 // 馬上檢查，但會等候個 app 完全開啟個時先會。因為這是 async function。
@@ -245,6 +250,8 @@ app.on('ready', async () => {
   // 主要視窗根據係咪登入去放 window 的視窗
   // 如果有登入就去 windows.main，無就 windows.tutorial
   const toggleActivity = async event => {
+    await getLoggedInStatus()
+
     if (loggedIn) {
       toggleWindow(event || null, windows.main, tray)
       return

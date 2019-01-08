@@ -162,7 +162,7 @@ export const mainStyles = css`
   }
 
   .copyright a:before {
-    content: '\\25B2';
+    content: '';
   }
 
   .copyright a:hover {

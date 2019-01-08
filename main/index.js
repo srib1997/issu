@@ -117,7 +117,6 @@ const contextMenu = async (windows, inRenderer) => {
 app.commandLine.appendSwitch('disable-renderer-backgrounding')
 
 app.on('ready', async () => {
-  console.log('ready')
   // Config 一開始係一個空的 object
   let config = {}
 

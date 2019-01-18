@@ -65,7 +65,7 @@ class Sections extends React.PureComponent {
 
 class Title extends PureComponent {
   static propTypes = {
-    children: PropTypes.element.isRequired
+    children: PropTypes.string
   }
 
   render() {

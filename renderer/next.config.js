@@ -24,7 +24,9 @@ module.exports = {
   },
   exportPathMap() {
     return {
-      '/feed': { page: '/feed' }
+      '/feed': { page: '/feed' },
+      '/tutorial': { page: '/tutorial' },
+      '/about': { page: '/about' }
     }
   }
 }

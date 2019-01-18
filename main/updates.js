@@ -1,19 +1,8 @@
 const { app, autoUpdater } = require('electron')
 const isDev = require('electron-is-dev')
 const ms = require('ms')
-const log = require('electron-log')
 const { version } = require('../package')
 const { getConfig, saveConfig } = require('./utils/config')
-
-const deleteUpdateConfig = () =>
-  saveConfig(
-    {
-      desktop: {
-        updatedFrom: null
-      }
-    },
-    'config'
-  )
 
 const isCanary = async () => {
   const { updateChannel } = await getConfig()
@@ -25,7 +14,7 @@ const setUpdateURL = async () => {
 
   const channel = (await isCanary()) ? 'releases-canary' : 'releases'
   const feedURL = `https://update.issu.app/${channel}/${platform}`
-  log.error(feedURL + '/' + app.getVersion())
+
   try {
     autoUpdater.setFeedURL(feedURL + '/' + app.getVersion())
   } catch (error) {}
@@ -37,7 +26,7 @@ const checkForUpdates = async () => {
     setTimeout(checkForUpdates, ms('30m'))
     return
   }
-  log.error('checkForUpdates1')
+
   // Ensure we're pulling from the correct channel
   try {
     await setUpdateURL()
@@ -45,10 +34,20 @@ const checkForUpdates = async () => {
     // Retry later if setting the update URL failed
     return
   }
-  log.error('checkForUpdates2')
+
   // Then ask the server for updates
   autoUpdater.checkForUpdates()
 }
+
+const deleteUpdateConfig = () =>
+  saveConfig(
+    {
+      desktop: {
+        updatedFrom: null
+      }
+    },
+    'config'
+  )
 
 const startAppUpdates = async mainWindow => {
   let config
@@ -61,7 +60,7 @@ const startAppUpdates = async mainWindow => {
 
   const updatedFrom = config.desktop && config.desktop.updatedFrom
   const appVersion = isDev ? version : app.getVersion()
-  log.error('appVersion', appVersion)
+
   // Ensure that update state gets refreshed after relaunch
   await deleteUpdateConfig()
 
@@ -113,15 +112,15 @@ const startAppUpdates = async mainWindow => {
   })
 
   autoUpdater.on('checking-for-update', () => {
-    log.error('Checking for app updates...')
+    console.log('Checking for app updates...')
   })
 
   autoUpdater.on('update-available', () => {
-    log.error('Found update for the app! Downloading...')
+    console.log('Found update for the app! Downloading...')
   })
 
   autoUpdater.on('update-not-available', () => {
-    log.error('No updates found. Checking again in 5 minutes...')
+    console.log('No updates found. Checking again in 5 minutes...')
     setTimeout(checkForUpdates, ms('5m'))
   })
 }

@@ -57,6 +57,10 @@ exports.getConfig = async () => {
 
   Object.assign(content, config || {}, tokenProp)
 
+  if (typeof content.currentTeam === 'object') {
+    content.currentTeam = content.currentTeam.id
+  }
+
   if (!content.token) {
     // Throw new Error('No user token defined')
   }
@@ -107,6 +111,10 @@ exports.saveConfig = async (data, type) => {
   } catch (error) {}
 
   if (type === 'config') {
+    if (data.currentTeam !== null && typeof data.currentTeam === 'object') {
+      data.currentTeam = data.currentTeam.id
+    }
+
     if (!currentContent._) {
       currentContent._ = 'This is your Issu config file.'
       currentContent.updateChannel = 'stable'

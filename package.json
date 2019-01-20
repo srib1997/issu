@@ -19,7 +19,7 @@
     "babel-eslint": "^10.0.1",
     "chokidar": "^2.0.4",
     "deep-extend": "^0.6.0",
-    "electron-is-dev": "0.3.0",
+    "electron-is-dev": "^1.0.1",
     "electron-log": "^2.2.17",
     "electron-next": "3.1.5",
     "electron-positioner": "^4.1.0",
@@ -28,9 +28,13 @@
     "fix-path": "^2.1.0",
     "fs-extra": "^7.0.1",
     "groom": "^1.1.1",
+    "identicon.js": "^2.3.3",
+    "make-unique": "^1.0.4",
     "ms": "^2.1.1",
     "path-exists": "^3.0.0",
     "react-fast-compare": "^2.0.4",
+    "react-refs": "^3.0.4",
+    "react-sortable-hoc": "^1.4.0",
     "time-ago": "^0.2.1"
   },
   "devDependencies": {

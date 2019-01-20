@@ -7,6 +7,8 @@ import { Component } from 'react'
 import Switcher from '../components/feed/switcher'
 import isDarkMode from '../utils/dark-mode'
 import Title from '../components/title'
+import Loading from '../components/feed/loading'
+import NoEvents from '../components/feed/none'
 
 // Styles
 import { feedStyles, pageStyles } from '../styles/pages/feed'
@@ -175,6 +177,64 @@ class Feed extends Component {
     this.setState({ teams })
   }
 
+  renderEvents(/* team */) {
+    const { scope, events, online, darkMode } = this.state
+
+    if (!online) {
+      return <Loading darkBg={darkMode} offline />
+    }
+
+    const scopedEvents = events[scope]
+
+    if (!scopedEvents) {
+      return <Loading darkBg={darkMode} />
+    }
+
+    if (scopedEvents.length === 0) {
+      return <NoEvents darkBg={this.state.darkMode} />
+    }
+
+    // // const months = {}
+
+    // for (const message of filteredEvents) {
+    //   const created = parse(message.created)
+    //   const month = format(created, 'MMMM YYYY')
+
+    //   if (!months[month]) {
+    //     months[month] = []
+    //   }
+
+    //   months[month].push(message)
+    // }
+
+    // const eventList = month => {
+    //   return months[month].map(content => {
+    //     const args = {
+    //       content,
+    //       currentUser: this.state.currentUser,
+    //       team,
+    //       setScopeWithSlug: this.setScopeWithSlug,
+    //       message: content.message,
+    //       group,
+    //       darkBg: this.state.darkMode
+    //     }
+
+    //     return <EventMessage {...args} key={content.id} />
+    //   })
+    // }
+
+    // // We can't just use `month` as the ID for each heading,
+    // // because they would glitch around in that case (as
+    // // the month is the same across scopes)
+    // return Object.keys(months).map(month => [
+    //   <h1 className={this.state.darkMode ? 'dark' : ''} key={scope + month}>
+    //     {month}
+    //     <style jsx>{headingStyles}</style>
+    //   </h1>,
+    //   eventList(month)
+    // ])
+  }
+
   render() {
     // 拿番個現在已點選的 team.id 比 Switcher
     const activeScope = this.detectScope('id', this.state.scope)
@@ -196,15 +256,13 @@ class Feed extends Component {
             {activeScope ? activeScope.name : 'Now'}
           </Title>
 
-          {/* <section
+          <section
             className={this.state.darkMode ? 'dark' : ''}
             ref={this.setReference}
-            onScroll={this.scrolled}
             name="scrollingSection"
           >
             {this.renderEvents(activeScope)}
-            {this.loadingOlder()}
-          </section> */}
+          </section>
 
           <Switcher
             // 問：this.setScope 是什麼? Switcher 用它來做什麼?

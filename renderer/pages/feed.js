@@ -6,6 +6,7 @@ import { Component } from 'react'
 // Components
 import Switcher from '../components/feed/switcher'
 import isDarkMode from '../utils/dark-mode'
+import Title from '../components/title'
 
 // Styles
 import { feedStyles, pageStyles } from '../styles/pages/feed'
@@ -156,6 +157,10 @@ class Feed extends Component {
     this.setState({ scope })
   }
 
+  detectScope(property, value) {
+    return this.state.teams.find(team => team[property] === value)
+  }
+
   // 何時執行: 由於 feed 預設不會知道 teams 是什麼
   // 需要由 switcher 去執行並告訴 feed 有幾多個 teams
   setTeams = async (teams, firstLoad) => {
@@ -172,7 +177,7 @@ class Feed extends Component {
 
   render() {
     // 拿番個現在已點選的 team.id 比 Switcher
-    const activeScope = this.state.scope
+    const activeScope = this.detectScope('id', this.state.scope)
 
     // Componentdidmount 之後先會有野出
     if (!this.state.hasLoaded) {
@@ -181,7 +186,26 @@ class Feed extends Component {
 
     return (
       <main>
-        <div onDragEnter={this.showDropZone}>
+        <div>
+          <Title
+            ref={this.setReference}
+            light
+            name="title"
+            darkBg={this.state.darkMode}
+          >
+            {activeScope ? activeScope.name : 'Now'}
+          </Title>
+
+          {/* <section
+            className={this.state.darkMode ? 'dark' : ''}
+            ref={this.setReference}
+            onScroll={this.scrolled}
+            name="scrollingSection"
+          >
+            {this.renderEvents(activeScope)}
+            {this.loadingOlder()}
+          </section> */}
+
           <Switcher
             // 問：this.setScope 是什麼? Switcher 用它來做什麼?
             // 答 setScope function 用來設定現在想睇那一個 scope (即想睇自己個版還是其他 team 的版面)

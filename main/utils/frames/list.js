@@ -43,7 +43,7 @@ exports.tutorialWindow = tray => {
   const win = new electron.BrowserWindow({
     width: 650,
     height: 430,
-    title: 'Welcome to Now',
+    title: 'Welcome to Issu',
     resizable: false,
     center: true,
     frame: false,
@@ -89,7 +89,7 @@ exports.aboutWindow = tray => {
   const win = new electron.BrowserWindow({
     width: 360,
     height: 408,
-    title: 'About Now',
+    title: 'About Issu',
     resizable: false,
     center: true,
     show: false,

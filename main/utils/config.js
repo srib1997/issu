@@ -210,7 +210,7 @@ exports.watchConfig = async () => {
     return
   }
 
-  // Load this now, because it otherwise doesn't work
+  // Load this Issu, because it otherwise doesn't work
   const logout = require('./logout')
 
   // Start watching the config file and

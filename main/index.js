@@ -134,7 +134,7 @@ if (isDev && process.platform === 'darwin') {
 const isFirstRun = firstRun()
 
 // 若為第一次運行, 需要設為開機時開啟程式
-// Make Now start automatically on login
+// Make Issu start automatically on login
 if (!isDev && isFirstRun) {
   app.setLoginItemSettings({
     openAtLogin: true
@@ -257,7 +257,7 @@ app.on('ready', async () => {
   // 將 windows 放入 global
   global.windows = windows
 
-  // Listen to changes inside .now.json
+  // Listen to changes inside .issu.json
   // This needs to be called AFTER setting global.windows
   // 不斷看 config 檔案(~/.issu/config.json)有沒有更改
   await watchConfig()
@@ -307,7 +307,7 @@ app.on('ready', async () => {
     toggleWindow(event || null, windows.tutorial)
   }
 
-  // Only allow one instance of Now running
+  // Only allow one instance of Issu running
   // at the same time
   // 只可以開一個程式
   const gotInstanceLock = app.requestSingleInstanceLock()

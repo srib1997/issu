@@ -197,7 +197,6 @@ class Feed extends Component {
         //   ...boardData
         // })
       })
-    console.log(JSON.stringify(board))
     return board
   }
 
@@ -480,7 +479,7 @@ class Feed extends Component {
             name="title"
             darkBg={this.state.darkMode}
           >
-            {activeScope ? activeScope.name : 'Now'}
+            {activeScope ? activeScope.name : 'Issu'}
           </Title>
 
           <section
@@ -523,6 +522,8 @@ class Feed extends Component {
             // 問：this.state.darkMode 是什麼? Switcher 用它來做什麼?
             // 呢個唔洗理
             darkBg={this.state.darkMode}
+            fetchGithub={this.fetchGithub}
+            fetchTrello={this.fetchTrello}
           />
         </div>
 

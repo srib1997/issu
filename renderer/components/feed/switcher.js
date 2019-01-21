@@ -408,13 +408,13 @@ class Switcher extends Component {
     return {
       teams: [
         {
-          id: 'IZSNu3Ty',
-          name: 'Trello',
+          id: 'aaa',
+          name: 'github',
           avatarUrl: this.generateAvatar('IZSNu3Ty')
         },
         {
           id: 'di61gxME',
-          name: 'IZSNu3Ty',
+          name: 'Trello',
           avatarUrl: this.generateAvatar('di61gxME')
         }
       ]
@@ -756,7 +756,9 @@ Switcher.propTypes = {
   setTeams: func,
   activeScope: string,
   darkBg: bool,
-  online: bool
+  online: bool,
+  fetchGithub: func,
+  fetchTrello: func
 }
 
 export default Switcher

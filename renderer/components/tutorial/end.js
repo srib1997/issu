@@ -26,7 +26,7 @@ class End extends Component {
       return
     }
 
-    // Also save it to now.json
+    // Also save it to issu.json
     const { saveConfig, watchConfig } = this.remote.require('./utils/config')
 
     try {
@@ -42,7 +42,7 @@ class End extends Component {
       return
     }
 
-    // Start watching for changes in .now.json
+    // Start watching for changes in .issu.json
     // This will update the scope in the main window
     watchConfig()
 

@@ -1,3 +1,142 @@
+/**
+ * 主要
+ * - feed 傳入的 props
+ *   - setFeedScope: func, 執行 func 後會有什麼事情發生?
+ *     - 通知返 feed.js , <Switcher/> 去執行, 當點算不同的 team 時會執行, 睇自己個版還是其他 team 的版
+ *     1. clear scroll, 將捲軸推至最上
+ *     2. 將 feed state.scope 設為 switcher 選中的 team id
+ *     3. 執行 cacheEvents
+ *   - setTeams: func
+ *     1. 如果傳入第一個參數是 null 時, 就 updateEvent, 而 feed 不會更新 teams
+ *     2. 若果傳入第一個參數是 teams array 時
+ *        - feed.js 的 setState teams，再 updateEvent
+ *   - activeScope: string
+ *     1. feed.js 中現在選中 team 的 object
+ *   - darkBg: bool
+ *     1. feed 中 state.darkMode
+ *   - online: bool
+ *     1. feed 中 state.online
+ *
+ * - switcher state
+ *   - teams: [],
+ *     - state.teams 唯一在 loadTeams 中會被 set
+ *     - 而 loadTeams 會用到 getTeams 入面的 object { teams }
+ *       - 什麼時候 loadTeams 會被 call
+ *       1. showWindow 時
+ *       2. listTimer 時
+ *       3. componentDidMount 時
+ *       4. this.ipcRenderer.on('config-changed') 時
+ *   - scope: null,
+ *     - team.id
+ *     - componentWillReceiveProps 時, scope 被 set 為預設第一個 team 的 id
+ *     - changeScope 時, scope set 為 team.id
+ *       - 什麼時候 changeScope 會被 call
+ *       1. team avatar 按下時
+ *       2. componentWillReceiveProps 帶有 activeScope 時
+ *       3. resetScope 時
+ *       4. checkCurrentTeam 時
+ *   - updateFailed: false,
+ *     - 按下 closeUpdateMessage 時，updateFailed: false
+ *     - 接收到 update-failed 時，updateFailed: false
+ *   - initialized: false,
+ *     - componentDidUpdate 時，initialized: true
+ *   - syncInterval: '5s',
+ *     - showWindow 時 5sec
+ *     - hideWindow 時 5min
+ *   - queue: []
+ *     - changeScope 時, 將 updateConfig 包裝成 queueFunction 然後存入 queue array
+ *     - componentDidUpdate 時, 將 queue 入面每一個 queueFuction 攞出黎，並運行
+ *
+ * - switcher 主要的內容
+ *   - showWindow
+ *     1. 曾經 hide 過 window 後 再 show window
+ *       2. 清除 timer
+ *       3. loadTeams fn, 載入多次 teams
+ *       4. 執行 listTimer, 開返個 timer, 以5s為單位
+ *   - hideWindow
+ *     1. 若果此時 window 是 show 的狀態
+ *       2. 清除 timer
+ *       3. loadTeams fn, 載入多次 teams
+ *       4. 執行 listTimer, 開返個 timer, 以5min為單位
+ *   - componentWillReceiveProps
+ *     1. 當 switcher 收到新 props 時
+ *       2. 若收到 activeScope object prop
+ *         3. 執行 changeScope, 因為有機會已經轉左 team 了
+ *       4. 若沒有收到 activeScope object prop
+ *         5. 將 switcher.state.scope 設為預設的 team id
+ *   - componentWillMount
+ *     1. 增加 showWindow 同 hideWindow 的 listener
+ *     2. 當關 app 前，會清返 showWindow 同 hideWindow 的 listener
+ *   - listTimer
+ *     1. 主要作用係 set this.timer
+ *     2. 視乎 window 係顯示或者隱藏，5s / 5 min 執行一次 this.timer
+ *   - componentDidMount
+ *     1. 檢查有沒有收到 'update-failed' event, 有就 set state updateFailed to false
+ *     2. 執行 listTimer, 啟動 timer for loadTeams
+ *     3. 執行 checkCurrentTeam
+ *     4. 執行 listenToConfig
+ *   - listenToConfig
+ *     0. 在 componentDidMount 裡被執行
+ *     1. 監聽收到 config-changed 時
+ *       2. loadTeams fn, 載入多次 teams, (為了以防萬一有新的 team 加入)
+ *       3. 執行 checkCurrentTeam
+ *   - resetScope
+ *     1. checkCurrentTeam 和 loadTeams 時執行(都是找不到team.id時執行)
+ *     2. 執行 changeScope()
+ *   - checkCurrentTeam
+ *     (主要係負責檢查 config.currentTeam，然後利用該值去 changeScope)
+ *     1. 若果在 config file 裡沒有 currentTeam, 執行 resetScope
+ *     2. 將 config.currentTeam 看看存不存在於 getTeams 的 teams 中
+ *       3. 若不存在, 證明該 config.currentTeam 已被刪除, 執行 resetScope
+ *   - saveConfig
+ *     1. 在 utils 調用 saveconfig fn
+ *       2. 將 object 存入去 config file
+ *   - generateAvatar
+ *     - 由 str 產生和返回 base64 的頭像字串
+ *   - getTeams
+ *     - 返回 { teams }
+ *   - merge
+ *     - 將第一個 array 和第二個 array 結合, 返回 已經結合的 array
+ *   - haveUpdated
+ *     1. 參數 data 是傳入的 teams array
+ *     2. 將 data(新 teams) 和 state.teams (舊 teams) 比對, 刪除一些已不存在的 teams
+ *     3. 將新和舊的 teams 用 merge 結合, 返回最新版的 teams array
+ *   - loadTeams
+ *     - 當視窗隱藏時, 只載入 teams events
+ *       - this.props.setTeams(null, firstLoad)
+ *       - When passing `null`, the feed will only, update the events, not the teams
+ *     - 當視窗顯示時
+ *       1. teams 由 getTeams 得一中土弓
+ *       2. 由 haveUpdated 得到新的 teams
+ *       3. state.scope 不能在更新的 teams 中找到時, resetScope
+ *       4. set state teams to updated teams
+ *       5. 透過  this.props.setTeams 通知 feed, this.props.setTeams(updated || null, firstLoad)
+ *   - componentDidUpdate
+ *     1. 執行 queue 裡面的 function
+ *     2. set state.initialized 為 true
+ *   - getDerivedStateFromProps
+ *     - 離線模式 state.initialized: false
+ *   - updateConfig
+ *     - 將 currentTeam 的資料由 team 參數處得到，整埋好, 交比 saveConfig 處理
+ *     - 將收到的參數傳入 saveConfig()
+ *   - changeScope
+ *     1. 通知 feed, this.props.setFeedScope(
+ *     2. set state.scope
+ *     3. 準備好更新 config 的 queueFunction
+ *   - openMenu
+ *     - 按下設置按鈕時, 傳送 'open-menu' 比 index.js 以開啟 menu
+ *   - renderItem
+ *     - 圓錄錄的頭
+ *   - renderTeams
+ *     - 入面有好多個 Item component 姐係 renderItem
+ *   - renderList
+ *     - 包住 renderTeams
+ *   - retryUpdate
+ *     - 按 retry link 時關閉程式再開
+ *   - closeUpdateMessage
+ *     - 將 state.updateFailed 設為 false, 這樣就不會顯示更新錯誤的提示訊息
+ */
+
 // Native
 import crypto from 'crypto'
 
@@ -99,7 +238,7 @@ class Switcher extends Component {
     }
 
     this.setState({
-      scope: 'aaa'
+      scope: 'IZSNu3Ty'
     })
   }
 
@@ -202,7 +341,7 @@ class Switcher extends Component {
 
   // 有改
   resetScope() {
-    this.changeScope('aaa')
+    this.changeScope({ id: 'IZSNu3Ty' })
   }
 
   async checkCurrentTeam(config) {
@@ -269,14 +408,14 @@ class Switcher extends Component {
     return {
       teams: [
         {
-          id: 'aaa',
-          name: 'AAA',
-          avatarUrl: this.generateAvatar('aaa')
+          id: 'IZSNu3Ty',
+          name: 'Trello',
+          avatarUrl: this.generateAvatar('IZSNu3Ty')
         },
         {
-          id: 'bbb',
-          name: 'BBB',
-          avatarUrl: this.generateAvatar('bbb')
+          id: 'di61gxME',
+          name: 'IZSNu3Ty',
+          avatarUrl: this.generateAvatar('di61gxME')
         }
       ]
     }

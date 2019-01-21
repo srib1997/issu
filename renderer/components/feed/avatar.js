@@ -1,3 +1,9 @@
+/**
+ * 主要
+ * - state.url, 由 props.avatarUrl 提供
+ * - state.title, 由 props.team.name 提供
+ */
+
 // Packages
 import { PureComponent } from 'react'
 import { object, bool, number, string } from 'prop-types'

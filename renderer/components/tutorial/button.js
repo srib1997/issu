@@ -1,3 +1,8 @@
+/**
+ * 主要
+ * 傳 props.onclick 比 button component
+ */
+
 // Packages
 import { PureComponent } from 'react'
 import { func, bool, string } from 'prop-types'

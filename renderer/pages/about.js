@@ -1,3 +1,8 @@
+/**
+ * 主要
+ * - about window
+ */
+
 // Packages
 import electron from 'electron'
 import React from 'react'

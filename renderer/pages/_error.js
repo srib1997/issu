@@ -1,3 +1,9 @@
+/**
+ * 主要
+ * - custom next.js error component
+ * - 有錯誤就通知 sentry 記錄
+ */
+
 import * as Sentry from '@sentry/electron'
 import React from 'react'
 import Error from 'next/error'

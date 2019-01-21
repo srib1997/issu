@@ -1,3 +1,8 @@
+/**
+ * 主要
+ * loading component
+ */
+
 // Packages
 import { bool } from 'prop-types'
 

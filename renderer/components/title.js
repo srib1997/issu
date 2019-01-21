@@ -1,3 +1,8 @@
+/**
+ * 主要
+ * 記得將 title 要顯示放入 props.children
+ */
+
 // Packages
 import { PureComponent } from 'react'
 import PropTypes from 'prop-types'

@@ -1,3 +1,8 @@
+/**
+ * 主要
+ * - tutorial window
+ */
+
 // Packages
 import electron from 'electron'
 import React, { PureComponent } from 'react'

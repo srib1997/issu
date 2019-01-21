@@ -1,3 +1,11 @@
+/**
+ * 主要
+ * - 中間有個 button，按下時就會執行 showApp
+ *   - saveconfig token = 123456
+ *   - watchConfig
+ *   - 彈 mainWindow 出黎
+ */
+
 // Packages
 import electron from 'electron'
 import { Component } from 'react'

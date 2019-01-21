@@ -114,13 +114,10 @@ class Feed extends Component {
     }
   }
 
-  async loadEvents(team) {
-    console.log('loadEvents', team)
-
+  async fetchGithub() {
     let issues = []
-    await fetch(
-      'https://api-37qyyi8lr.now.sh/github/orgs/withcloud/issues?token=a18641402766a3c22ad8e328c5517aa12136efc8'
-    )
+
+    await fetch('')
       .then(res => res.json())
       .then(json => {
         issues = issues.concat(
@@ -128,10 +125,9 @@ class Feed extends Component {
             id: issue.id,
             created: issue.created_at,
             message: (
-              <p>
+              <p key={issue.id}>
                 <b>{` Issue: ${issue.title}`}</b>
                 <p />
-
                 {issue.labels.map(label => {
                   return (
                     <b
@@ -140,7 +136,11 @@ class Feed extends Component {
                     >{` label: ${label.name} `}</b>
                   )
                 })}
-                {` state: ${issue.state} `}
+                <p />
+                <b style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{` state: ${
+                  issue.state
+                } `}</b>
+                <p />
                 {issue.assignees.map(assignee => (
                   <b key={assignee.id}>{` @${assignee.login} `}</b>
                 ))}
@@ -148,9 +148,63 @@ class Feed extends Component {
             )
           }))
         )
+        /// issues = issues.concat({
+        //   ...json
+        // })
       })
+    return issues
+  }
 
-    const events = issues
+  async fetchTrello() {
+    let board = []
+
+    await fetch('')
+      .then(res => res.json())
+      .then(boardData => {
+        board = board.concat(
+          boardData.cards.map(card => ({
+            id: card.id,
+            created: card.dateLastActivity,
+            message: (
+              <p key={card.idBoard}>
+                <b>{`CardName: ${card.name} `}</b>
+                <p />
+                {card.desc ? <b>{` Desc: ${card.desc}`}</b> : <p />}
+                <p />
+                {card.labels.map(label => {
+                  return label.name ? (
+                    <b key={label.id} style={{ color: `${label.color}` }}>
+                      {` label: ${label.name} `}
+                    </b>
+                  ) : (
+                    <p />
+                  )
+                })}
+
+                {card.members.map(member => member.fullName || member.username)}
+              </p>
+            )
+          }))
+        )
+        /// board = board.concat({
+        //   // name: boardData.name,
+        //   // url: boardData.url,
+        //   // shortUrl: boardData.shortUrl,
+        //   // labelNames: boardData.abelNames,
+        //   // labels: boardData.labels,
+        //   // members: boardData.members.map(member => ({...member})),
+        //   // cards: boardData.cards.map(card => ({...card}))
+        //   ...boardData
+        // })
+      })
+    console.log(JSON.stringify(board))
+    return board
+  }
+
+  async loadEvents(team) {
+    console.log('loadEvents', team)
+
+    const events = this.fetchGithub()
 
     return events
   }

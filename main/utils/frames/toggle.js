@@ -1,3 +1,11 @@
+/**
+ * 主要
+ * (邊到用到? menu 和 main/index.js 都會用到)
+ * 1. 如果 windows 顯示就關
+ * 2. 如果 windows 隱藏就顯示
+ *   - 萬一要顯示的 window 是 main window
+ *   - 利用 positionWindow 將 main window 移到 tray 下面
+ */
 const positionWindow = require('./position')
 
 module.exports = (event, window, tray) => {

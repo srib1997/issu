@@ -1,3 +1,11 @@
+/**
+ * 主要
+ * - 滙出 innerMenu
+ *   - main/index.js 會用到
+ * - 滙出 outerMenu
+ *   - main/index.js 會用到
+ */
+
 // Packages
 const {
   Menu: { buildFromTemplate }

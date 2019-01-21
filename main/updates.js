@@ -1,3 +1,22 @@
+/**
+ * 主要
+ * - 執行 autoUpdate function (main/index.js 會用到)
+ *   - 會執行 startAppUpdates
+ *     1. 由 config file 讀取 config.desktop.updatedFrom
+ *     2. deleteUpdateConfig
+ *       - 將 updatedFrom 歸零
+ *     3. [傳送] 若有 updatedFrom 值, 即更新有錯誤, 傳送 'update-failed' 給 main window
+ *     4. 開左 app 十秒後執行 checkForUpdates
+ *     5. [事件接收] autoUpdater 收到 error的時侯，每15分鐘執行 checkForUpdate
+ *       - 如果離線就每30分鐘執行一次 checkForUpdate
+ *       - 否則就馬上執行 autoUpdater.checkForUpdates
+ *     6. [事件接收] autoUpdater 收到 update-downloaded 的時侯
+ *       - 就執行 saveconfig, 將 updatedFrom 變 appVersion
+ *       - 安裝更新, restart the application
+ *     7. [事件接收] autoUpdater 收到 'update-not-available' 的時候
+ *       - 5分鐘後再 checkForUpdates
+ */
+
 const { app, autoUpdater } = require('electron')
 const isDev = require('electron-is-dev')
 const ms = require('ms')

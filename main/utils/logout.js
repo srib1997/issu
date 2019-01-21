@@ -1,3 +1,11 @@
+/**
+ * 主要
+ * (當 config file 被刪除時會用到)
+ * - 1. 關閉 window
+ * - 2. 删 config
+ * - 3. 開 tutorialWindow
+ */
+
 // Packages
 // const fetch = require('node-fetch')
 

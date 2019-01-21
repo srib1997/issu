@@ -1,3 +1,16 @@
+/**
+ * 主要
+ * - main/index.js 會用到
+ * - export tutorialWindow
+ *   - [接收事件] win.on('open-tray') 時, 執行 emitTrayClick
+ *     - (tutorial window 最後按鈕會 emit 'open-tray' 事件)
+ *     - 會關閉 win
+ *     - win 隱藏時, 顯示 main window
+ * - export aboutWindow
+ * - export mainWindow
+ *  - 當 window 失去焦點時侯，就會隱藏 window
+ */
+
 // Packages
 const electron = require('electron')
 const isDev = require('electron-is-dev')

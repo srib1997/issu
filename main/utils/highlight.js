@@ -1,3 +1,9 @@
+/**
+ * 主要
+ * (list create 3 windows 會用到)
+ * - 根據 win 的狀態 (show, restore, focus) 的情況將 tray 轉為藍色
+ */
+
 // Packages
 const { app } = require('electron')
 

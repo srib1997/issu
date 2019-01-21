@@ -1,3 +1,9 @@
+/**
+ * 主要
+ * (list 和 toggle 會用到)
+ * 用來把 main window 移到 tray 下面
+ */
+
 // Native
 const { platform } = require('os')
 

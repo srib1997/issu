@@ -1,3 +1,43 @@
+/**
+ * 主要
+ * - 變量 loggedIn 會每兩秒會 check 一次, 看看 config 有沒有 token 的值
+ *   - 會改變 toggleActivity 時選擇 tutorial 還是 main window
+ *   - tray 按右鍵時會選擇那一個 contextMenu
+ * - process.env.CONNECTION
+ *   - 在 electron.ipcMain.on('online-status-changed') 時會設置這個值
+ *   - 誰傳送 'online-status-changed'? status.html 會根據瀏覽器的上網狀態來傳送
+ *   - 會影響 contextMenu return outerMenu 還是 innerMenu
+ *     - tray 按右鍵時
+ *     - electron.ipcMain.on('open-menu') 時, switcher 設置按鈕傳送的
+ * - 執行 autoUpdater
+ *   - startAppUpdates
+ * - 執行 watchConfig
+ *   - [事件接收] config 檔案有變更時, configWatcher.on('change')
+ *     - 執行 configChanged
+ *       - [傳送] send 'config-changed' to main window
+ *         - 在 main window 中, switcher 和 feed 都會收到
+ *         - switcher 中, 收到 'config-changed' 事件後
+ *           - 會重新 load teams
+ *         - [我們無要到] feed 中, 收到 'config-changed' 事件後
+ *           - 將 scope, events, teams 歸零
+ *   - [事件接收] config 檔案刪除時, configWatcher.on('unlink')
+ *     - logout('config-removed')
+ *       - remove config file
+ *       - show tutorial window
+ *       - notify 'Logged Oout'
+ * - [事件接收] electron.ipcMain.on('online-status-changed') 接收事件
+ *   - status.html 會根據瀏覽器的上網狀態來傳送
+ * - [事件接收] electron.ipcMain.on('open-menu') 接收事件
+ *   - switcher 設置按鈕傳送的
+ * - [傳送] subscribe 系統的 AppleInterfaceThemeChangedNotification 事件
+ *   - 傳送 'theme-changed' 給 main window [事件接收]
+ *   - 傳送 'theme-changed' 給 about window [事件接收]
+ * - 第一次運行
+ *   - 如果不是電腦自動開啟和不是更新未完成，彈 tutorial window
+ * - 不是第一次運行
+ *   - 如果 main 處於隱藏狀態和不是電腦自動開啟和不是更新未完成, 彈 main window
+ */
+
 // Packages
 const electron = require('electron')
 const isDev = require('electron-is-dev')
@@ -21,7 +61,11 @@ Sentry.init({
   dsn: 'https://c8371db438994884a56ff32199f5f4ba@sentry.io/1364904'
 })
 
-// 當 squirrel 開緊個時就馬上關閉此程式
+// Notes(comus):
+// 为了使最后的安装包能够实现自动更新，我们需要对现有的应用做一些改动，使它可以处理一些启动或者安装时的事件。
+// 它的代码只有短短几十行，做的事情也很简单，注意返回值为true的那几行，
+// 基本上来说就是安装时，更新完成时，卸载时都会被调用，我们需要根据不同的情况做不同的事情，
+// 完成这些事情后不要启动应用（会出错），直接退出就好。
 // Immediately quit the app if squirrel is launching it
 if (squirrelStartup) {
   electron.app.quit()
@@ -37,12 +81,9 @@ let tray = null
 // Prevent having to check for login status when opening the window
 let loggedIn = null
 
-// 馬上檢查登入狀態
-// 之後每兩秒檢查一次, 檢查 config 裡有沒有 token
-// Check status once in the beginning when the app starting up
-// And then every 2 seconds
-// We could to this on click on the tray icon, but we
-// don't want to block that action
+// Notes(comus):
+// call 這個 function 會馬上檢查 config file 內有沒有 token
+// 有 token set loggedIn = true 代表已登入
 const getLoggedInStatus = async () => {
   let token
 
@@ -55,11 +96,17 @@ const getLoggedInStatus = async () => {
   return loggedIn
 }
 
+// 馬上檢查登入狀態
+// 馬上檢查，但會等候個 app 完全開啟個時先會。因為這是 async function。
+// 之後每兩秒檢查一次, 檢查 config 裡有沒有 token
+// Check status once in the beginning when the app starting up
+// And then every 2 seconds
+// We could to this on click on the tray icon, but we
+// don't want to block that action
 const setLoggedInStatus = async () => {
   await getLoggedInStatus()
   setTimeout(setLoggedInStatus, 2000)
 }
-// 馬上檢查，但會等候個 app 完全開啟個時先會。因為這是 async function。
 setLoggedInStatus()
 
 // 由 electron 載入 app
@@ -108,7 +155,7 @@ app.on('window-all-closed', () => {
   }
 })
 
-// 依個係一個 async function, 視父你有無上線去決定你個右键 Menu
+// 依個係一個 async function, 視乎你有無上線去決定你個右键 Menu
 const contextMenu = async (windows, inRenderer) => {
   if (process.env.CONNECTION === 'offline') {
     return outerMenu(app, windows)
@@ -163,7 +210,7 @@ app.on('ready', async () => {
   // ...the icon and the app wouldn't know what to do
 
   // I have no idea why, but path.resolve doesn't work here
-  // 根劇唔同的 system 去換 tray 的 icon
+  // 根據唔同的 system 去換 tray 的 icon
 
   try {
     const iconName =

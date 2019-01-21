@@ -1,3 +1,19 @@
+/**
+ * 主要
+ * 1. 滙出 getConfig
+ * 2. 滙出 removeConfig
+ * 3. 滙出 saveConfig
+ * 4. 滙出 watchConfig
+ *   - [事件接收] config 檔案有變更時, configWatcher.on('change')
+ *     - 執行 configChanged
+ *       - [傳送] send 'config-changed' to main window
+ *         - 在 main window 中, switcher 和 feed 都會收到
+ *         - switcher 中, 收到 'config-changed' 事件後
+ *           - 會重新 load teams
+ *         - [我們無要到] feed 中, 收到 'config-changed' 事件後
+ *           - 將 scope, events, teams 歸零
+ */
+
 // Native
 const path = require('path')
 const { homedir } = require('os')

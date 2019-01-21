@@ -129,7 +129,7 @@ class Feed extends Component {
             created: issue.created_at,
             message: (
               <p>
-                <b>{issue.title}</b>
+                <b>{` Issue: ${issue.title}`}</b>
                 <p />
 
                 {issue.labels.map(label => {
@@ -140,7 +140,6 @@ class Feed extends Component {
                     >{` label: ${label.name} `}</b>
                   )
                 })}
-                {this.checkIssueState(issue.state)}
                 {` state: ${issue.state} `}
                 {issue.assignees.map(assignee => (
                   <b key={assignee.id}>{` @${assignee.login} `}</b>

@@ -32,6 +32,7 @@ import { Component } from 'react'
 import parse from 'date-fns/parse'
 import format from 'date-fns/format'
 import retry from 'async-retry'
+import fetch from 'node-fetch'
 
 // Components
 import Switcher from '../components/feed/switcher'
@@ -115,98 +116,42 @@ class Feed extends Component {
 
   async loadEvents(team) {
     console.log('loadEvents', team)
-    const events = [
-      {
-        id: '111',
-        created: new Date(),
-        message: 'aaa'
-      },
-      {
-        id: '222',
-        created: new Date(),
-        message: 'bbb'
-      },
-      {
-        id: '3',
-        created: new Date(),
-        message: 'aaa'
-      },
-      {
-        id: '4',
-        created: new Date(),
-        message: 'bbb'
-      },
-      {
-        id: '5',
-        created: new Date(),
-        message: 'aaa'
-      },
-      {
-        id: '6',
-        created: new Date(),
-        message: 'bbb'
-      },
-      {
-        id: '3',
-        created: new Date(),
-        message: 'aaa'
-      },
-      {
-        id: '4',
-        created: new Date(),
-        message: 'bbb'
-      },
-      {
-        id: '5',
-        created: new Date(),
-        message: 'aaa'
-      },
-      {
-        id: '6',
-        created: new Date(),
-        message: 'bbb'
-      },
-      {
-        id: '3',
-        created: new Date(),
-        message: 'aaa'
-      },
-      {
-        id: '4',
-        created: new Date(),
-        message: 'bbb'
-      },
-      {
-        id: '5',
-        created: new Date(),
-        message: 'aaa'
-      },
-      {
-        id: '6',
-        created: new Date(),
-        message: 'bbb'
-      },
-      {
-        id: '3',
-        created: new Date(),
-        message: 'aaa'
-      },
-      {
-        id: '4',
-        created: new Date(),
-        message: 'bbb'
-      },
-      {
-        id: '5',
-        created: new Date(),
-        message: 'aaa'
-      },
-      {
-        id: '6',
-        created: new Date(),
-        message: 'bbb'
-      }
-    ]
+
+    let issues = []
+    await fetch(
+      'https://api-37qyyi8lr.now.sh/github/orgs/withcloud/issues?token=a18641402766a3c22ad8e328c5517aa12136efc8'
+    )
+      .then(res => res.json())
+      .then(json => {
+        issues = issues.concat(
+          json.map(issue => ({
+            id: issue.id,
+            created: issue.created_at,
+            message: (
+              <p>
+                <b>{issue.title}</b>
+                <p />
+
+                {issue.labels.map(label => {
+                  return (
+                    <b
+                      key={label.id}
+                      style={{ color: `#${label.color}` }}
+                    >{` label: ${label.name} `}</b>
+                  )
+                })}
+                {this.checkIssueState(issue.state)}
+                {` state: ${issue.state} `}
+                {issue.assignees.map(assignee => (
+                  <b key={assignee.id}>{` @${assignee.login} `}</b>
+                ))}
+              </p>
+            )
+          }))
+        )
+      })
+
+    const events = issues
 
     return events
   }

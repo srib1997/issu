@@ -33,6 +33,7 @@
     "identicon.js": "^2.3.3",
     "make-unique": "^1.0.4",
     "ms": "^2.1.1",
+    "node-fetch": "^2.3.0",
     "path-exists": "^3.0.0",
     "react-fast-compare": "^2.0.4",
     "react-refs": "^3.0.4",

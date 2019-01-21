@@ -6,12 +6,15 @@ export const localStyles = css`
     display: flex;
     justify-content: space-between;
   }
+
   figure:hover {
     background: #f5f5f5;
   }
+
   figure.dark:hover {
     background: #333;
   }
+
   figure figcaption {
     border-top: 1px solid #f5f5f5;
     padding: 10px 10px 10px 0;
@@ -22,15 +25,19 @@ export const localStyles = css`
     word-break: break-word;
     flex-grow: 1;
   }
+
   figure.dark figcaption {
     border-top: 1px solid #333;
   }
+
   figure:last-child figcaption {
     padding-bottom: 10px;
   }
+
   figure:last-child figcaption {
     border-bottom: 0;
   }
+
   figure figcaption span {
     font-size: 10px;
     color: #9b9b9b;
@@ -42,6 +49,7 @@ export const globalStyles = css`
   h1 + .event figcaption {
     border-top: 0 !important;
   }
+
   .event p {
     font-size: 12px;
     margin: 0;
@@ -51,16 +59,20 @@ export const globalStyles = css`
     padding-right: 10px;
     flex-shrink: 1;
   }
+
   .event.dark p {
     color: #999;
   }
+
   .event p b {
     font-weight: normal;
     color: #000;
   }
+
   .event.dark p b {
     color: #fff;
   }
+
   .event p code {
     font-family: Menlo, Monaco, Lucida Console, Liberation Mono, serif;
     background: #f5f5f5;
@@ -70,19 +82,24 @@ export const globalStyles = css`
     margin: 5px 0;
     display: block;
   }
+
   .event.dark p code {
     background: #333;
     color: #ccc;
   }
+
   .event:hover p code {
     background: #e8e8e8;
   }
+
   .event.dark:hover p code {
     background: #464646;
   }
+
   .event:hover + .event figcaption {
     border-top-color: transparent;
   }
+
   .event mark {
     background: #ffff21;
   }

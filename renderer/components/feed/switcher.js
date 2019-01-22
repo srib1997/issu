@@ -410,12 +410,12 @@ class Switcher extends Component {
         {
           id: 'aaa',
           name: 'Github',
-          avatarUrl: this.generateAvatar('IZSNu3Ty')
+          avatarUrl: this.generateAvatar('Github')
         },
         {
           id: 'di61gxME',
           name: 'Trello',
-          avatarUrl: this.generateAvatar('di61gxME')
+          avatarUrl: this.generateAvatar('Trello')
         }
       ]
     }

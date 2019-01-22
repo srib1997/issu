@@ -33,6 +33,7 @@ import parse from 'date-fns/parse'
 import format from 'date-fns/format'
 import retry from 'async-retry'
 import fetch from 'node-fetch'
+import ms from 'ms'
 
 // Components
 import Switcher from '../components/feed/switcher'
@@ -117,37 +118,44 @@ class Feed extends Component {
   async fetchGithub() {
     let issues = []
 
-    await fetch('https://api-15czfp6xw.now.sh/github/orgs/withcloud/issues')
+    await fetch(
+      'https://api-15czfp6xw.now.sh/github/orgs/withcloud/issues?smaxage=60'
+    )
       .then(res => res.json())
       .then(json => {
         issues = issues.concat(
-          json.map(issue => ({
-            id: issue.id,
-            created: issue.created_at,
-            message: (
-              <p key={issue.id}>
-                <b>{` Issue: ${issue.title}`}</b>
-                <p />
-                {issue.labels.map(label => {
-                  return (
-                    <b
-                      key={label.id}
-                      style={{ color: `#${label.color}` }}
-                    >{` label: ${label.name} `}</b>
-                  )
-                })}
-                <p />
-                <b style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{` state: ${
-                  issue.state
-                } `}</b>
-                <p />
-                {issue.assignees.map(assignee => (
-                  <b key={assignee.id}>{` @${assignee.login} `}</b>
-                ))}
-              </p>
-            ),
-            user: { login: issue.user.login, avatarUrl: issue.user.avatar_url }
-          }))
+          json.map(issue => {
+            return {
+              id: issue.id,
+              created: issue.created_at,
+              message: (
+                <p key={issue.id}>
+                  <b>{` Issue: ${issue.title}`}</b>
+                  <p />
+                  {issue.labels.map(label => {
+                    return (
+                      <b
+                        key={label.id}
+                        style={{ color: `#${label.color}` }}
+                      >{` label: ${label.name} `}</b>
+                    )
+                  })}
+                  <p />
+                  <b style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{` state: ${
+                    issue.state
+                  } `}</b>
+                  <p />
+                  {issue.assignees.map(assignee => (
+                    <b key={assignee.id}>{` @${assignee.login} `}</b>
+                  ))}
+                </p>
+              ),
+              user: {
+                login: issue.user.login,
+                avatarUrl: issue.user.avatar_url
+              }
+            }
+          })
         )
       })
     return issues
@@ -156,7 +164,9 @@ class Feed extends Component {
   async fetchTrello() {
     let board = []
 
-    await fetch('https://api-15czfp6xw.now.sh/trello/boards/IZSNu3Ty')
+    await fetch(
+      'https://api-15czfp6xw.now.sh/trello/boards/IZSNu3Ty?smaxage=60'
+    )
       .then(res => res.json())
       .then(boardData => {
         board = board.concat(
@@ -194,7 +204,7 @@ class Feed extends Component {
 
   async loadEvents(team) {
     console.log('loadEvents', team)
-    const events = this.fetchTrello()
+    const events = this.fetchGithub()
     return events
   }
 
@@ -237,7 +247,6 @@ class Feed extends Component {
     if (!this.scrollingSection) {
       return
     }
-
     this.scrollingSection.scrollTop = 0
   }
 
@@ -246,7 +255,6 @@ class Feed extends Component {
   // ShowWindow 時執行 setOnlineState()
   showWindow = () => {
     this.setOnlineState()
-
     // Ensure that scrolling position only gets
     // resetted if the window was closed for 5 seconds
     // clearTimeout(this.scrollTimer)
@@ -257,7 +265,7 @@ class Feed extends Component {
     this.setOnlineState()
 
     // Clear scrolling position if window closed for 5 seconds
-    // this.scrollTimer = setTimeout(this.clearScroll, ms('5s'))
+    this.scrollTimer = setTimeout(this.clearScroll, ms('5s'))
   }
 
   // ListenThemeChange 收到 theme-changed 信息的時侯，就執行 onThemeChanged

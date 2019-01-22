@@ -203,7 +203,7 @@ class Feed extends Component {
   async loadEvents(team) {
     console.log('loadEvents', team)
 
-    const events = this.fetchGithub()
+    const events = this.fetchTrello()
 
     return events
   }
@@ -522,8 +522,6 @@ class Feed extends Component {
             // 問：this.state.darkMode 是什麼? Switcher 用它來做什麼?
             // 呢個唔洗理
             darkBg={this.state.darkMode}
-            fetchGithub={this.fetchGithub}
-            fetchTrello={this.fetchTrello}
           />
         </div>
 

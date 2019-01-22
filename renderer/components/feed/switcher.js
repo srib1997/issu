@@ -756,9 +756,7 @@ Switcher.propTypes = {
   setTeams: func,
   activeScope: string,
   darkBg: bool,
-  online: bool,
-  fetchGithub: func,
-  fetchTrello: func
+  online: bool
 }
 
 export default Switcher

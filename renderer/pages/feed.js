@@ -117,7 +117,9 @@ class Feed extends Component {
   async fetchGithub() {
     let issues = []
 
-    await fetch('')
+    await fetch(
+      'https://api-37qyyi8lr.now.sh/github/orgs/withcloud/issues?token=c0c4897484b766258ad663fc6c1b47fafdb97132'
+    )
       .then(res => res.json())
       .then(json => {
         issues = issues.concat(
@@ -158,7 +160,9 @@ class Feed extends Component {
   async fetchTrello() {
     let board = []
 
-    await fetch('')
+    await fetch(
+      'https://api-37qyyi8lr.now.sh/trello/boards/IZSNu3Ty?key=fbb3e9c534b9f603d4b994cced60b867&token=6d71b4208f3d68175325473b5ca40f54f163244241d4357d349d5352ea1d36ef'
+    )
       .then(res => res.json())
       .then(boardData => {
         board = board.concat(
@@ -166,7 +170,7 @@ class Feed extends Component {
             id: card.id,
             created: card.dateLastActivity,
             message: (
-              <p key={card.idBoard}>
+              <p key={card.id}>
                 <b>{`CardName: ${card.name} `}</b>
                 <p />
                 {card.desc ? <b>{` Desc: ${card.desc}`}</b> : <p />}
@@ -177,11 +181,15 @@ class Feed extends Component {
                       {` label: ${label.name} `}
                     </b>
                   ) : (
-                    <p />
+                    <b key={label.id} style={{ color: `${label.color}` }}>
+                      {` label: ${label.color} `}
+                    </b>
                   )
                 })}
 
-                {card.members.map(member => member.fullName || member.username)}
+                {card.members.map(member => (
+                  <p key={member.id}>{member.fullName || member.username}</p>
+                ))}
               </p>
             )
           }))

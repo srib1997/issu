@@ -409,7 +409,7 @@ class Switcher extends Component {
       teams: [
         {
           id: 'aaa',
-          name: 'github',
+          name: 'Github',
           avatarUrl: this.generateAvatar('IZSNu3Ty')
         },
         {

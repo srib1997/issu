@@ -117,7 +117,7 @@ class Feed extends Component {
   async fetchGithub() {
     let issues = []
 
-    await fetch('')
+    await fetch('https://api-oc4s5thx4.now.sh/github/orgs/withcloud/issues')
       .then(res => res.json())
       .then(json => {
         issues = issues.concat(
@@ -158,7 +158,7 @@ class Feed extends Component {
   async fetchTrello() {
     let board = []
 
-    await fetch('')
+    await fetch('https://api-oc4s5thx4.now.sh/trello/boards/IZSNu3Ty')
       .then(res => res.json())
       .then(boardData => {
         board = board.concat(
@@ -207,7 +207,7 @@ class Feed extends Component {
   async loadEvents(team) {
     console.log('loadEvents', team)
 
-    const events = this.fetchGithub()
+    const events = this.fetchTrello()
 
     return events
   }

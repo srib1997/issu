@@ -117,9 +117,7 @@ class Feed extends Component {
   async fetchGithub() {
     let issues = []
 
-    await fetch(
-      'https://api-37qyyi8lr.now.sh/github/orgs/withcloud/issues?token=c0c4897484b766258ad663fc6c1b47fafdb97132'
-    )
+    await fetch('')
       .then(res => res.json())
       .then(json => {
         issues = issues.concat(
@@ -160,9 +158,7 @@ class Feed extends Component {
   async fetchTrello() {
     let board = []
 
-    await fetch(
-      'https://api-37qyyi8lr.now.sh/trello/boards/IZSNu3Ty?key=fbb3e9c534b9f603d4b994cced60b867&token=6d71b4208f3d68175325473b5ca40f54f163244241d4357d349d5352ea1d36ef'
-    )
+    await fetch('')
       .then(res => res.json())
       .then(boardData => {
         board = board.concat(
@@ -211,7 +207,7 @@ class Feed extends Component {
   async loadEvents(team) {
     console.log('loadEvents', team)
 
-    const events = this.fetchTrello()
+    const events = this.fetchGithub()
 
     return events
   }

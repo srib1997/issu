@@ -11,6 +11,9 @@ import { localStyles, globalStyles } from '../../styles/components/feed/event'
 // Utilities
 import dateDiff from '../../utils/date-diff'
 
+// Components
+import Avatar from './avatar'
+
 class EventMessage extends PureComponent {
   state = {
     url: null
@@ -82,7 +85,7 @@ class EventMessage extends PureComponent {
   }
 
   render() {
-    const { message, content, darkBg } = this.props
+    const { message, content, darkBg, team } = this.props
     const classes = ['event']
 
     if (darkBg) {
@@ -91,6 +94,7 @@ class EventMessage extends PureComponent {
 
     return (
       <figure className={classes.join(' ')} onClick={this.click}>
+        <Avatar event={content} darkBg={darkBg} avatarUrl={team.avatarUrl} />
         <figcaption>
           {message}
           <span>{this.parseDate(content.created)}</span>

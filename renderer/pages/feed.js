@@ -117,7 +117,7 @@ class Feed extends Component {
   async fetchGithub() {
     let issues = []
 
-    await fetch('https://api-oc4s5thx4.now.sh/github/orgs/withcloud/issues')
+    await fetch('https://api-15czfp6xw.now.sh/github/orgs/withcloud/issues')
       .then(res => res.json())
       .then(json => {
         issues = issues.concat(
@@ -145,12 +145,10 @@ class Feed extends Component {
                   <b key={assignee.id}>{` @${assignee.login} `}</b>
                 ))}
               </p>
-            )
+            ),
+            user: { login: issue.user.login, avatarUrl: issue.user.avatar_url }
           }))
         )
-        /// issues = issues.concat({
-        //   ...json
-        // })
       })
     return issues
   }
@@ -158,7 +156,7 @@ class Feed extends Component {
   async fetchTrello() {
     let board = []
 
-    await fetch('https://api-oc4s5thx4.now.sh/trello/boards/IZSNu3Ty')
+    await fetch('https://api-15czfp6xw.now.sh/trello/boards/IZSNu3Ty')
       .then(res => res.json())
       .then(boardData => {
         board = board.concat(
@@ -190,25 +188,13 @@ class Feed extends Component {
             )
           }))
         )
-        /// board = board.concat({
-        //   // name: boardData.name,
-        //   // url: boardData.url,
-        //   // shortUrl: boardData.shortUrl,
-        //   // labelNames: boardData.abelNames,
-        //   // labels: boardData.labels,
-        //   // members: boardData.members.map(member => ({...member})),
-        //   // cards: boardData.cards.map(card => ({...card}))
-        //   ...boardData
-        // })
       })
     return board
   }
 
   async loadEvents(team) {
     console.log('loadEvents', team)
-
     const events = this.fetchTrello()
-
     return events
   }
 
@@ -448,7 +434,6 @@ class Feed extends Component {
           message: content.message,
           darkBg: this.state.darkMode
         }
-
         return <EventMessage {...args} key={content.id} />
       })
     }

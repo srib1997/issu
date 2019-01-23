@@ -143,7 +143,7 @@ import crypto from 'crypto'
 // Packages
 import electron from 'electron'
 import { Component } from 'react'
-import { func, bool, string } from 'prop-types'
+import { func, bool, string, arrayOf } from 'prop-types'
 import setRef from 'react-refs'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 import makeUnique from 'make-unique'
@@ -756,7 +756,8 @@ Switcher.propTypes = {
   setTeams: func,
   activeScope: string,
   darkBg: bool,
-  online: bool
+  online: bool,
+  githubData: arrayOf
 }
 
 export default Switcher

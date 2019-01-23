@@ -46,6 +46,8 @@ import EventMessage from '../components/feed/event'
 // Styles
 import { feedStyles, pageStyles, headingStyles } from '../styles/pages/feed'
 
+let githubData = []
+
 class Feed extends Component {
   state = {
     events: {},
@@ -158,6 +160,7 @@ class Feed extends Component {
           })
         )
       })
+    githubData = [...issues]
     return issues
   }
 
@@ -436,12 +439,15 @@ class Feed extends Component {
 
     const eventList = month => {
       return months[month].map(content => {
+        const githubAvatar = githubData.map(data => data.user.avatarUrl)
         const args = {
           content,
           team,
           message: content.message,
-          darkBg: this.state.darkMode
+          darkBg: this.state.darkMode,
+          githubAvatar
         }
+
         return <EventMessage {...args} key={content.id} />
       })
     }
@@ -519,6 +525,7 @@ class Feed extends Component {
             // 問：this.state.darkMode 是什麼? Switcher 用它來做什麼?
             // 呢個唔洗理
             darkBg={this.state.darkMode}
+            githubData={githubData}
           />
         </div>
 

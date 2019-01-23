@@ -1,7 +1,7 @@
 // Packages
 import electron from 'electron'
 import { PureComponent } from 'react'
-import { object, bool } from 'prop-types'
+import { object, bool, string } from 'prop-types'
 import dotProp from 'dot-prop'
 import ms from 'ms'
 
@@ -85,7 +85,7 @@ class EventMessage extends PureComponent {
   }
 
   render() {
-    const { message, content, darkBg, team } = this.props
+    const { message, content, darkBg, githubAvatar } = this.props
     const classes = ['event']
 
     if (darkBg) {
@@ -94,7 +94,7 @@ class EventMessage extends PureComponent {
 
     return (
       <figure className={classes.join(' ')} onClick={this.click}>
-        <Avatar event={content} darkBg={darkBg} avatarUrl={team.avatarUrl} />
+        <Avatar event={content} darkBg={darkBg} avatarUrl={githubAvatar} />
         <figcaption>
           {message}
           <span>{this.parseDate(content.created)}</span>
@@ -113,7 +113,8 @@ EventMessage.propTypes = {
   content: object,
   team: object,
   message: object,
-  darkBg: bool
+  darkBg: bool,
+  githubAvatar: string
 }
 
 export default EventMessage
